@@ -23,7 +23,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//encrypt button
 void MainWindow::on_pushButton_encrypt_clicked()
 {
     QString plainText = ui->plainTextEdit_plain->toPlainText();
@@ -32,14 +31,13 @@ void MainWindow::on_pushButton_encrypt_clicked()
     if(ui->comboBox->currentIndex() == 0)
     {
         QString key = ui->AES_lineEdit_key->text();
-        encryptedText = ewAES(plainText, key.toStdString());
+        encryptedText = ewDES(plainText, key.toStdString());
 
     }
 
     ui->plainTextEdit_encrypted->document()->setPlainText(encryptedText);
 }
 
-//decrypt button
 void MainWindow::on_pushButton_decrypt_clicked()
 {
     QString encryptedText = ui->plainTextEdit_encrypted->toPlainText();
@@ -48,7 +46,7 @@ void MainWindow::on_pushButton_decrypt_clicked()
     if(ui->comboBox->currentIndex() == 0)
     {
         QString key = ui->AES_lineEdit_key->text();
-        plainText = dwAES(encryptedText, key.toStdString());
+        plainText = dwDES(encryptedText, key.toStdString());
     }
     ui->plainTextEdit_plain->document()->setPlainText(plainText);
 }
@@ -59,12 +57,10 @@ void MainWindow::on_actionReset_Fields_triggered()
     ui->plainTextEdit_plain->clear();
     ui->plainTextEdit_encrypted->clear();
 }
-// clear plain text
 void MainWindow::on_actionClear_Plain_Text_triggered()
 {
     ui->plainTextEdit_plain->clear();
 }
-// clear encrypted text
 void MainWindow::on_actionClear_Encrypted_Text_triggered()
 {
     ui->plainTextEdit_encrypted->clear();
@@ -76,8 +72,6 @@ void MainWindow::on_actionNew_triggered()
     file_path ="";
     ui->plainTextEdit_plain->setPlainText("");
 }
-
-
 void MainWindow::on_actionOpen_triggered() {
     QString file_name = QFileDialog::getOpenFileName(this, "Open a file", QDir::homePath());
     QMessageBox::information(this, "..", file_name);
@@ -188,6 +182,7 @@ std::vector< std::string > MainWindow::keyPreparation(std::string key)
 
 
     int PC2_permutations[48] = {
+
         14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10,
         23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2,
         41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
@@ -502,7 +497,7 @@ char MainWindow::binaryAsciiToChar(std::string binaryAscii)
 
 
 //logic
-QString MainWindow::ewAES(QString plainText, std::string key)
+QString MainWindow::ewDES(QString plainText, std::string key)
 {
     std::vector< std::string > keys = keyPreparation(key);
     std::vector< std::string > blocks = textToBinaryAscii(plainText.toStdString());
@@ -517,7 +512,7 @@ QString MainWindow::ewAES(QString plainText, std::string key)
     return encryptedText;
 }
 
-QString MainWindow::dwAES(QString encryptedText, std::string key)
+QString MainWindow::dwDES(QString encryptedText, std::string key)
 {
     std::vector< std::string > keys = keyPreparation(key);
     std::reverse(keys.begin(), keys.end());

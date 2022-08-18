@@ -62,8 +62,8 @@ private:
 
 
     //logic
-    QString ewAES(QString plainText, std::string key);
-    QString dwAES(QString encryptedText, std::string key);
+    QString ewDES(QString plainText, std::string key);
+    QString dwDES(QString encryptedText, std::string key);
 };
 
 #endif // MAINWINDOW_H
